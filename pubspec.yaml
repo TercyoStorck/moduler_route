@@ -1,0 +1,20 @@
+name: moduler_route
+description: A project to separete your aplication in modules and manager yout routes.
+version: 1.0.0
+homepage: https://github.com/TercyoStorck/moduler_route
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  page_transition: ^1.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets:
+    - assets/404.jpg
