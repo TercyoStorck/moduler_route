@@ -7,10 +7,10 @@ import 'package:moduler_route/moduler_route.dart';
 
 final String _modulePath = "second-module";
 
-class SecondModule implements Module {
+class SecondModule extends Module {
   static final routePaths = _Routes();
 
-  const SecondModule();
+  SecondModule();
 
   @override
   String get path => _modulePath;
@@ -38,9 +38,9 @@ class SecondModule implements Module {
 }
 
 class _Routes {
-  String _secondModuleView = "second-module-view";
+  String _secondModuleView = "/";
   String _secondModuleViewDetail = "second-module-view/detail";
 
-  String get secondModuleView => "$_modulePath/$_secondModuleView";
-  String get secondModuleViewDetail => "$_modulePath/$_secondModuleViewDetail";
+  String get secondModuleView => "$_modulePath/";
+  String get secondModuleViewDetail => "$_secondModuleViewDetail";
 }

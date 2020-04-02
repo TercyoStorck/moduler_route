@@ -7,6 +7,7 @@ import 'dart:io' show Platform;
 import 'injector.dart';
 import 'module.dart';
 import 'module_route.dart';
+import 'route_transiction_type.dart';
 import 'unknown_route.dart';
 
 part 'inject.dart';
@@ -35,9 +36,15 @@ mixin Moduler {
 
       routePath = fullPath.join('/');
 
-      module = modules?.firstWhere(
-        (module) => module.path == modulePath,
-      );
+      if (routePath?.isEmpty != false) {
+        routePath = "/";
+      }
+
+      if (modules?.any((module) => module?.path == modulePath) == true) {
+        module = modules?.firstWhere(
+          (module) => module?.path == modulePath,
+        );
+      }
     }
 
     if (module == null) {
@@ -50,16 +57,28 @@ mixin Moduler {
       }
 
       if (route == null) {
-        throw "Route not found";
+        return _pageRoute(UnknownRoute(), null);
       }
     }
 
-    if (_currentModule?.module?.path != module.path) {
+    if (module == null) {
+      module = _currentModule.module;
+      routePath = routeSettings.name;
+    }
+
+    if (_currentModule?.module?.path != module?.path) {
       _currentModule.module = module;
 
-      final globalTypes = this.globalInjections.map((injector) => injector.type).toList();
+      final globalTypes = this
+          .globalInjections
+          .map(
+            (injector) => injector.type,
+          )
+          .toList();
 
-      Inject._objects.removeWhere((type, injector) => !globalTypes.contains(type));
+      Inject._objects.removeWhere(
+        (type, injector) => !globalTypes.contains(type),
+      );
       Inject._injections.clear();
       Inject._injections.addAll(this.globalInjections);
       Inject._injections.addAll(_currentModule.module.injections);
@@ -70,40 +89,42 @@ mixin Moduler {
     );
 
     if (route == null) {
-      throw "Route not found";
+      return _pageRoute(UnknownRoute(), null);
     }
 
-    if (route.transitionType != null) {
-      return PageTransition(
-        child: route.builder(routeSettings.arguments),
-        type: route.transitionType,
-      );
-    }
-
-    if (Platform.isIOS) {
-      return CupertinoPageRoute(
-        builder: (BuildContext context) =>
-            route.builder(routeSettings.arguments),
-      );
-    }
-
-    return MaterialPageRoute(
-      builder: (BuildContext context) => route.builder(routeSettings.arguments),
-    );
+    final view = route.builder(routeSettings.arguments);
+    return _pageRoute(view, route.transitionType);
   }
 
   Route unknownRoute(RouteSettings route) {
+    return _pageRoute(UnknownRoute(), null);
+  }
+
+  PageRoute _pageRoute(Widget view, RouteTransitionType transitionType) {
+    if (transitionType == null ||
+        transitionType == RouteTransitionType.cupertino ||
+        transitionType == RouteTransitionType.material) {
+      if (transitionType == RouteTransitionType.cupertino ||
+          transitionType == null && Platform.isIOS) {
+        return CupertinoPageRoute(
+          builder: (BuildContext context) => view,
+        );
+      }
+
+      return MaterialPageRoute(
+        builder: (BuildContext context) => view,
+      );
+    }
+
     return PageTransition(
-      child: UnknownRoute(),
-      type: PageTransitionType.fade,
+      child: view,
+      type: transitionTypeConvertion[transitionType],
     );
   }
 }
 
 class _CurrentModule {
   Module module;
-
   bool get hasModule => this.module != null;
-
   void reset() => module = null;
 }

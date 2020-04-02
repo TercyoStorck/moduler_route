@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:page_transition/page_transition.dart';
+
+import 'route_transiction_type.dart';
 
 class ModuleRoute {
   ModuleRoute({
@@ -10,7 +11,7 @@ class ModuleRoute {
 
   final String path;
   final WidgetFunction builder;
-  final PageTransitionType transitionType;
+  final RouteTransitionType transitionType;
 }
 
 typedef WidgetFunction = Widget Function(Object args);

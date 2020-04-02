@@ -5,7 +5,11 @@ class UnknownRoute extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Color(0xFF092535),
         body: Center(
-          child: Image.asset("assets/404.jpg"),
+          child: Text(
+            "404\nRoute not found!",
+            style: TextStyle(fontSize: 80, color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
         ),
       );
 }

@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget with Moduler {
   List<Module> get modules => [
         MainModule(_dao),
         FirstModule(_user),
-        const SecondModule(),
+        SecondModule(),
       ];
 
   @override
@@ -58,26 +58,3 @@ class MyApp extends StatelessWidget with Moduler {
     }),
   ];
 }
-
-
-
-/* abstract class GlobalModule extends StatelessWidget with Moduler {
-  @override
-  List<Injector> get injections => [];
-
-  @override
-  List<Module> get modules => [];
-} */
-
-/* class ModulerNavigator {
-  static void pushTo<T extends Module>(String path) {
-    final type = map[T];
-    print(type);
-  }
-}
-
-final map = {
-  View1Module: "Module 1",
-  View2Module: "Module 2",
-};
- */

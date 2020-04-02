@@ -5,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 
 final String _modulePath = "first-module";
 
-class FirstModule implements Module {
+class FirstModule extends Module {
   static final routePaths = _Routes();
 
   FirstModule(this._user);
@@ -22,6 +22,7 @@ class FirstModule implements Module {
           builder: (_) {
             return FirstModuleView();
           },
+          transitionType: RouteTransitionType.material
         ),
       ];
 

@@ -8,10 +8,10 @@ import 'package:moduler_route/moduler_route.dart';
 
 final String _modulePath = "main";
 
-class MainModule implements Module {
+class MainModule extends Module {
   static final routePaths = _Routes();
 
-  const MainModule(this._dao);
+  MainModule(this._dao);
   
   final DAO _dao;
 
