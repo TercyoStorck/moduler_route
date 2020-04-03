@@ -33,7 +33,7 @@ mixin Moduler {
       modulePath = fullPath[0];
 
       fullPath.removeAt(0);
-
+      
       routePath = fullPath.join('/');
 
       if (routePath?.isEmpty != false) {
@@ -44,20 +44,6 @@ mixin Moduler {
         module = modules?.firstWhere(
           (module) => module?.path == modulePath,
         );
-      }
-    }
-
-    if (module == null) {
-      ModuleRoute route;
-
-      if (_currentModule.hasModule) {
-        route = _currentModule.module.routes.firstWhere(
-          (route) => route.path == routeSettings.name,
-        );
-      }
-
-      if (route == null) {
-        return _pageRoute(UnknownRoute(), null);
       }
     }
 
@@ -86,6 +72,11 @@ mixin Moduler {
 
     final route = module?.routes?.firstWhere(
       (route) => route.path == routePath,
+      orElse: () {
+        return _currentModule.module.routes.firstWhere(
+            (route) => route.path == "/" || route.path == "",
+            orElse: () => null);
+      },
     );
 
     if (route == null) {
