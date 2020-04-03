@@ -6,7 +6,6 @@ import 'dart:io' show Platform;
 
 import 'injector.dart';
 import 'module.dart';
-import 'module_route.dart';
 import 'route_transiction_type.dart';
 import 'unknown_route.dart';
 
@@ -33,7 +32,7 @@ mixin Moduler {
       modulePath = fullPath[0];
 
       fullPath.removeAt(0);
-      
+
       routePath = fullPath.join('/');
 
       if (routePath?.isEmpty != false) {
@@ -48,7 +47,14 @@ mixin Moduler {
     }
 
     if (module == null) {
-      module = _currentModule.module;
+      modulePath = fullPath[0];
+
+      if (modules?.any((module) => module?.path == modulePath) == true) {
+        module = modules?.firstWhere(
+          (module) => module?.path == modulePath,
+        );
+      }
+
       routePath = routeSettings.name;
     }
 
@@ -73,7 +79,7 @@ mixin Moduler {
     final route = module?.routes?.firstWhere(
       (route) => route.path == routePath,
       orElse: () {
-        return _currentModule.module.routes.firstWhere(
+        return module?.routes?.firstWhere(
             (route) => route.path == "/" || route.path == "",
             orElse: () => null);
       },

@@ -1,7 +1,6 @@
 import 'package:example/bloc/first_module/first_module_bloc.dart';
 import 'package:example/views/first_module/first_module_view.dart';
 import 'package:moduler_route/moduler_route.dart';
-import 'package:page_transition/page_transition.dart';
 
 final String _modulePath = "first-module";
 
