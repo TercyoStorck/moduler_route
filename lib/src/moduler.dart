@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:moduler_route/src/module_route.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:io' show Platform;
 
+import 'collection/module_stack.dart';
 import 'injector.dart';
 import 'module.dart';
 import 'route_transiction_type.dart';
@@ -15,87 +17,87 @@ mixin Moduler {
   List<Module> get modules;
   List<Injector> get globalInjections;
 
-  final _currentModule = _CurrentModule();
+  final _modulesStack = StackModule();
+
+  Module _module(String path) {
+    final splitedPath = path.split("/");
+    final modulePath = splitedPath.length > 1 ? splitedPath[0] : path;
+
+    final module = modules?.firstWhere(
+      (module) => module?.path == modulePath,
+      orElse: () => _modulesStack.currentModule,
+    );
+
+    return module;
+  }
+
+  ModuleRoute _route(String path, Module module) {
+    if (path.endsWith("/")) {
+      path = path.substring(0, path.length - 1);
+    }
+
+    return module?.routes?.firstWhere(
+      (route) => route.path == path,
+      orElse: () => module?.routes?.firstWhere(
+          (route) => route.path == "/" && module.path == path, orElse: () {
+        final splitedRoute = path.split("/")..removeAt(0);
+        final routePath = splitedRoute.join("/");
+
+        return module?.routes?.firstWhere(
+          (route) => route.path == routePath,
+          orElse: () => null,
+        );
+      }),
+    );
+  }
+
+  void _manageInjections(Module module) {
+    if (module != null && _modulesStack.currentModule?.path == module?.path) {
+      return;
+    }
+
+    _modulesStack.push(module);
+
+    final globalTypes = this
+        .globalInjections
+        .map(
+          (injector) => injector.type,
+        )
+        .toList();
+
+    Inject._objects.removeWhere(
+      (type, injector) => !globalTypes.contains(type),
+    );
+    Inject._injections.clear();
+    Inject._injections.addAll(this.globalInjections);
+    Inject._injections.addAll(_modulesStack.currentModule.injections);
+  }
 
   String initialRoute(String Function() initialPath) => initialPath();
 
   Route routeTo(RouteSettings routeSettings) {
-    Inject._parameter = routeSettings.arguments;
-
-    final fullPath = routeSettings.name.split("/");
-
-    String modulePath;
-    String routePath;
-    Module module;
-
-    if (fullPath.length > 1) {
-      modulePath = fullPath[0];
-
-      fullPath.removeAt(0);
-
-      routePath = fullPath.join('/');
-
-      if (routePath?.isEmpty != false) {
-        routePath = "/";
-      }
-
-      if (modules?.any((module) => module?.path == modulePath) == true) {
-        module = modules?.firstWhere(
-          (module) => module?.path == modulePath,
-        );
-      }
-    }
-
-    if (module == null) {
-      modulePath = fullPath[0];
-
-      if (modules?.any((module) => module?.path == modulePath) == true) {
-        module = modules?.firstWhere(
-          (module) => module?.path == modulePath,
-        );
-      }
-
-      routePath = routeSettings.name;
-    }
-
-    if (module == null) {
-      module = _currentModule.module;
-      routePath = routeSettings.name;
-    }
-
-    if (_currentModule?.module?.path != module?.path) {
-      _currentModule.module = module;
-
-      final globalTypes = this
-          .globalInjections
-          .map(
-            (injector) => injector.type,
-          )
-          .toList();
-
-      Inject._objects.removeWhere(
-        (type, injector) => !globalTypes.contains(type),
-      );
-      Inject._injections.clear();
-      Inject._injections.addAll(this.globalInjections);
-      Inject._injections.addAll(_currentModule.module.injections);
-    }
-
-    final route = module?.routes?.firstWhere(
-      (route) => route.path == routePath,
-      orElse: () {
-        return module?.routes?.firstWhere(
-            (route) => route.path == "/" || route.path == "",
-            orElse: () => null);
-      },
-    );
+    final module = _module(routeSettings.name);
+    final route = _route(routeSettings.name, module);
 
     if (route == null) {
       return _pageRoute(UnknownRoute(), null);
     }
 
+    _manageInjections(module);
+
+    Inject._parameter = routeSettings.arguments;
+
     final view = route.builder(routeSettings.arguments);
-    return _pageRoute(view, route.transitionType);
+    final pageRoute = _pageRoute(view, route.transitionType);
+
+    /* pageRoute.popped.whenComplete(
+      () {
+        final newxtRoute = Route<dynamic>();
+        pageRoute.didChangeNext(nextRoute)
+      },
+    ); */
+
+    return pageRoute;
   }
 
   Route unknownRoute(RouteSettings route) {
@@ -123,10 +125,4 @@ mixin Moduler {
       type: transitionTypeConvertion[transitionType],
     );
   }
-}
-
-class _CurrentModule {
-  Module module;
-  bool get hasModule => this.module != null;
-  void reset() => module = null;
 }
