@@ -41,6 +41,6 @@ class _Routes {
   String _secondModuleView = "/";
   String _secondModuleViewDetail = "second-module-view/detail";
 
-  String get secondModuleView => "$_modulePath/";
+  String get secondModuleView => "$_modulePath";
   String get secondModuleViewDetail => "$_secondModuleViewDetail";
 }

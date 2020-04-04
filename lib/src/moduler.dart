@@ -58,6 +58,11 @@ mixin Moduler {
       routePath = routeSettings.name;
     }
 
+    if (module == null) {
+      module = _currentModule.module;
+      routePath = routeSettings.name;
+    }
+
     if (_currentModule?.module?.path != module?.path) {
       _currentModule.module = module;
 
