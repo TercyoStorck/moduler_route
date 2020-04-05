@@ -8,16 +8,19 @@ import 'dart:io' show Platform;
 import 'collection/module_stack.dart';
 import 'injector.dart';
 import 'module.dart';
+import 'moduler_route_observer.dart';
 import 'route_transiction_type.dart';
 import 'unknown_route.dart';
 
 part 'inject.dart';
 
 mixin Moduler {
+  static final _modulesStack = StackModule();
+
   List<Module> get modules;
   List<Injector> get globalInjections;
 
-  final _modulesStack = StackModule();
+  final ModulerRouteObserver modulerRouteObserver = ModulerRouteObserver(_modulesStack);
 
   Module _module(String path) {
     final splitedPath = path.split("/");
@@ -25,7 +28,7 @@ mixin Moduler {
 
     final module = modules?.firstWhere(
       (module) => module?.path == modulePath,
-      orElse: () => _modulesStack.currentModule,
+      orElse: () => _modulesStack.top(),
     );
 
     return module;
@@ -52,7 +55,7 @@ mixin Moduler {
   }
 
   void _manageInjections(Module module) {
-    if (module != null && _modulesStack.currentModule?.path == module?.path) {
+    if (module != null && _modulesStack.top()?.path == module?.path) {
       return;
     }
 
@@ -70,7 +73,7 @@ mixin Moduler {
     );
     Inject._injections.clear();
     Inject._injections.addAll(this.globalInjections);
-    Inject._injections.addAll(_modulesStack.currentModule.injections);
+    Inject._injections.addAll(_modulesStack.top().injections);
   }
 
   String initialRoute(String Function() initialPath) => initialPath();
@@ -80,7 +83,12 @@ mixin Moduler {
     final route = _route(routeSettings.name, module);
 
     if (route == null) {
-      return _pageRoute(UnknownRoute(), null);
+      return _pageRoute(
+        UnknownRoute(),
+        null,
+        "unknown",
+        null,
+      );
     }
 
     _manageInjections(module);
@@ -88,39 +96,55 @@ mixin Moduler {
     Inject._parameter = routeSettings.arguments;
 
     final view = route.builder(routeSettings.arguments);
-    final pageRoute = _pageRoute(view, route.transitionType);
-
-    /* pageRoute.popped.whenComplete(
-      () {
-        final newxtRoute = Route<dynamic>();
-        pageRoute.didChangeNext(nextRoute)
-      },
-    ); */
+    final pageRoute = _pageRoute(
+      view,
+      route.transitionType,
+      routeSettings.name,
+      module.path,
+    );
 
     return pageRoute;
   }
 
   Route unknownRoute(RouteSettings route) {
-    return _pageRoute(UnknownRoute(), null);
+    return _pageRoute(
+      UnknownRoute(),
+      null,
+      "unknown",
+      null,
+    );
   }
 
-  PageRoute _pageRoute(Widget view, RouteTransitionType transitionType) {
+  PageRoute _pageRoute(
+    Widget view,
+    RouteTransitionType transitionType,
+    String name,
+    String modulePath,
+  ) {
+    final settings = RouteSettings(
+      name: name,
+      arguments: modulePath,
+    );
+
     if (transitionType == null ||
         transitionType == RouteTransitionType.cupertino ||
         transitionType == RouteTransitionType.material) {
       if (transitionType == RouteTransitionType.cupertino ||
           transitionType == null && Platform.isIOS) {
         return CupertinoPageRoute(
+          settings: settings,
           builder: (BuildContext context) => view,
         );
       }
 
       return MaterialPageRoute(
+        settings: settings,
         builder: (BuildContext context) => view,
       );
     }
 
     return PageTransition(
+      settings: settings,
       child: view,
       type: transitionTypeConvertion[transitionType],
     );

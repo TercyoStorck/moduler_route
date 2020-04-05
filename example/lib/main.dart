@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget with Moduler {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      navigatorObservers: [modulerRouteObserver],
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
