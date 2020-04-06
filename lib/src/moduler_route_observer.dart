@@ -32,9 +32,4 @@ class ModulerRouteObserver extends RouteObserver<PageRoute<dynamic>> {
       _manageModules(previousRoute);
     }
   }
-
-  /* @override // route **remove all unless the top module
-  void didRemove(Route route, Route previousRoute) {
-    super.didRemove(route, previousRoute);
-  } */
 }
