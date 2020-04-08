@@ -28,7 +28,7 @@ class ModulerRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPop(route, previousRoute);
     
-    if (previousRoute is PageRoute && route is PageRoute) {
+    if (previousRoute is PageRoute) {
       _manageModules(previousRoute);
     }
   }

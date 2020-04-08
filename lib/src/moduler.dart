@@ -20,7 +20,9 @@ mixin Moduler {
   List<Module> get modules;
   List<Injector> get globalInjections;
 
-  final ModulerRouteObserver modulerRouteObserver = ModulerRouteObserver(_modulesStack);
+  final ModulerRouteObserver modulerRouteObserver = ModulerRouteObserver(
+    _modulesStack,
+  );
 
   Module _module(String path) {
     final splitedPath = path.split("/");
@@ -61,18 +63,32 @@ mixin Moduler {
 
     _modulesStack.push(module);
 
-    final globalTypes = this
+    final injectedTypes = this
         .globalInjections
         .map(
           (injector) => injector.type,
         )
-        .toList();
+        .toList()
+          ..addAll(
+            _modulesStack.injectedTypes,
+          );
 
     Inject._objects.removeWhere(
-      (type, injector) => !globalTypes.contains(type),
+      (type, injector) => !injectedTypes.contains(type),
     );
-    Inject._injections.clear();
-    Inject._injections.addAll(this.globalInjections);
+
+    Inject._injections.removeWhere(
+      (injector) => !injectedTypes.contains(injector.type),
+    );
+
+    this.globalInjections?.forEach((injector) {
+      if (Inject._injections.any((i) => i == injector)) {
+        return;
+      }
+
+      Inject._injections.add(injector);
+    });
+
     Inject._injections.addAll(_modulesStack.top().injections);
   }
 

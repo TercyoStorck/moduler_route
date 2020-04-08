@@ -45,6 +45,7 @@ abstract class Inject {
   static final Map<Type, dynamic> _mocks = {};
 
   /// pass mocked instance to [instance]. And [<T>] the original type
+  @visibleForTesting
   static void mock<T>(T instance) {
     _mocks.putIfAbsent(T, () => instance);
   }

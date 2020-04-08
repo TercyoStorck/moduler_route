@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:moduler_route/moduler_route.dart';
 
 class AppRegistrationView extends StatelessWidget {
-  final _bloc = Inject.instance<AppRegistrationBloc>();
+  final _bloc = Inject.get<AppRegistrationBloc>();
 
   @override
   Widget build(BuildContext context) => Scaffold(

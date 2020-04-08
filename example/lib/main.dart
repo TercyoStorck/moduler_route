@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget with Moduler {
       }),
       onGenerateRoute: routeTo,
       onUnknownRoute: unknownRoute,
+      navigatorObservers: [modulerRouteObserver],
     );
   }
 
