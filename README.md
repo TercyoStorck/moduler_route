@@ -13,6 +13,10 @@ class MyApp extends StatelessWidget with Moduler {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: initialRoute(() {
+        // Some rules to check the initial route
+        return "moduler/initial-route"
+      }),
       onGenerateRoute: routeTo,
       onUnknownRoute: unknownRoute,
       navigatorObservers: [modulerRouteObserver],
@@ -26,6 +30,7 @@ class MyApp extends StatelessWidget with Moduler {
   List<Injector> get globalInjections => [];
 }
 ```
+* `initialRoute(String Function())` a no async closure to check initial route
 * `modules` list of your modules
 * `globalInjections` all of your classes that you wanna get from any module
 
@@ -104,7 +109,7 @@ __Inject__ have two static methods:
 
 #### IMPORTANTE!! 
 
-When uses `get` the singleton still alive only navigation in a module. Unless it was injected on `globalInjections` in __Moduler__
+When uses `get`, the singleton will be alive only during navigation in a module. Unless it was injected on `globalInjections` in __Moduler__
 
 ## Mocking for unit test
 
