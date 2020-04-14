@@ -1,3 +1,6 @@
+## [1.1.0] (April 14, 2020)
+- Added dispose and reset to Inject
+
 ## [1.0.2] (April 9, 2020)
 - Hotfix dependency injections manager
 

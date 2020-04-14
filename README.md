@@ -103,12 +103,18 @@ To get the injected class you will use __Inject__
 final _controller = Inject.instance<MyController>();
 ```
 
-__Inject__ have two static methods:
+__Inject__ have two static methods to get objects:
 * `instance` return always a new instance of a object
 * `get` return an existing instance. If the object is not instantiated, it'll be create
 
-#### IMPORTANTE!! 
+And two more for remove the singletons only:
 
+To dispose a `Inject.get<MyController>();` injection. Just di this.
+
+* `dispose` remove only a specific object instance
+* `reset` remove all singletons
+
+#### IMPORTANTE!! 
 When uses `get`, the singleton will be alive only during navigation in a module. Unless it was injected on `globalInjections` in __Moduler__
 
 ## Mocking for unit test

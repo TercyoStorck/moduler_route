@@ -4,6 +4,8 @@ abstract class Inject {
   static Object _parameter;
   static final List<Injector> _injections = [];
   static final Map<Type, dynamic> _objects = {};
+  /// only for unit test purpose
+  static final Map<Type, dynamic> _mocks = {};
 
   /// Return a new instance of an object. If it already instantiated than override for a new one.
   static T instance<T>() {
@@ -41,8 +43,9 @@ abstract class Inject {
     return _objects[T] as T;
   }
 
-  /// only for unit test purpose
-  static final Map<Type, dynamic> _mocks = {};
+  static void dispose<T>() => _objects.remove(T);
+
+  static void reset() => _objects.clear();
 
   /// pass mocked instance to [instance]. And [<T>] the original type
   @visibleForTesting
