@@ -38,12 +38,10 @@ class LoginView extends StatelessWidget {
                     ),
                     RaisedButton(
                       onPressed: () {
-                        final user = _bloc.login();
+                        _bloc.login();
 
-                        Navigator.of(context).pushReplacementNamed(
-                          MainModule.routePaths.home,
-                          arguments: user,
-                        );
+                        Navigator.of(context)
+                            .pushReplacementNamed(MainModule.routePaths.home);
                       },
                       child: Text("Login"),
                     ),
