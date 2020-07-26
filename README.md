@@ -4,7 +4,7 @@ __Moduler route__ is a powerful route manager that works in a modular way that a
 
 ## Moduler
 
-`Moduler` is a mixin that will be inherited by your main widget and it's the heart of your modules. Here you'll informe your modules and global injections.
+`Moduler` is a mixin that will be inherited by your main widget and it's the heart of your modules. Here you'll inform your modules and global injections.
 
 ``` dart
 void main() => runApp(MyApp());
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget with Moduler {
 
 ## Modules
 
-The ideia behide moduler is separate your application in modules. To create a module do like code bellow.
+The idea behind moduler is separate your application in modules. To create a module do like code bellow.
 
 ``` dart
 class ExampleModule extends Module {
