@@ -15,7 +15,7 @@ enum RouteTransitionType {
   cupertino,
 }
 
-final transitionTypeConvertion = {
+final transitionTypeConversion = {
   RouteTransitionType.fade: PageTransitionType.fade,
   RouteTransitionType.rightToLeft: PageTransitionType.rightToLeft,
   RouteTransitionType.leftToRight: PageTransitionType.leftToRight,

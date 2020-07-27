@@ -12,7 +12,7 @@ class MainModule extends Module {
   static final routePaths = _Routes();
 
   MainModule(this._dao);
-  
+
   final DAO _dao;
 
   @override
@@ -30,7 +30,7 @@ class MainModule extends Module {
         ),
         ModuleRoute(
           path: routePaths._home,
-          builder: (args) => HomeView(args as String),
+          builder: (_) => HomeView(_dao.user),
         ),
       ];
 

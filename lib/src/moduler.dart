@@ -1,15 +1,16 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:moduler_route/src/module_route.dart';
 import 'package:page_transition/page_transition.dart';
-import 'dart:io' show Platform;
 
 import 'collection/module_stack.dart';
 import 'injector.dart';
 import 'module.dart';
 import 'moduler_route_observer.dart';
-import 'route_transiction_type.dart';
+import 'route_transition_type.dart';
 import 'unknown_route.dart';
 
 part 'inject.dart';
@@ -25,8 +26,8 @@ mixin Moduler {
   );
 
   Module _module(String path) {
-    final splitedPath = path.split("/");
-    final modulePath = splitedPath.length > 1 ? splitedPath[0] : path;
+    final dividedPath = path.split("/");
+    final modulePath = dividedPath.length > 1 ? dividedPath[0] : path;
 
     final module = modules?.firstWhere(
       (module) => module?.path == modulePath,
@@ -45,8 +46,8 @@ mixin Moduler {
       (route) => route.path == path,
       orElse: () => module?.routes?.firstWhere(
           (route) => route.path == "/" && module.path == path, orElse: () {
-        final splitedRoute = path.split("/")..removeAt(0);
-        final routePath = splitedRoute.join("/");
+        final dividedRoute = path.split("/")..removeAt(0);
+        final routePath = dividedRoute.join("/");
 
         return module?.routes?.firstWhere(
           (route) => route.path == routePath,
@@ -100,7 +101,7 @@ mixin Moduler {
 
     if (route == null) {
       return _pageRoute(
-        UnknownRoute(),
+        UnknownRoute(routeName: routeSettings.name),
         null,
         "unknown",
         null,
@@ -124,7 +125,7 @@ mixin Moduler {
 
   Route unknownRoute(RouteSettings route) {
     return _pageRoute(
-      UnknownRoute(),
+      UnknownRoute(routeName: route.name),
       null,
       "unknown",
       null,
@@ -162,7 +163,7 @@ mixin Moduler {
     return PageTransition(
       settings: settings,
       child: view,
-      type: transitionTypeConvertion[transitionType],
+      type: transitionTypeConversion[transitionType],
     );
   }
 }

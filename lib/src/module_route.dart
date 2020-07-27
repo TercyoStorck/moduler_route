@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'route_transiction_type.dart';
+import 'route_transition_type.dart';
 
 class ModuleRoute {
   ModuleRoute({
