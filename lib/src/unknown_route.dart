@@ -23,7 +23,7 @@ class UnknownRoute extends StatelessWidget {
                   style: TextStyle(fontSize: 16),
                 ),
               ),
-              OutlineButton.icon(
+              OutlinedButton.icon(
                 label: Text('Back'),
                 icon: Icon(Icons.arrow_back),
                 onPressed: () => Navigator.of(context).pop(),

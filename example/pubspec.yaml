@@ -13,7 +13,7 @@ dependencies:
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
   path_provider: ^1.6.5
-  page_transition: ^1.1.5
+  page_transition: ^2.0.2
   moduler_route:
     path: "../../moduler_route"
 
