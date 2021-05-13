@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
@@ -29,7 +30,7 @@ mixin Moduler {
     final dividedPath = path.split("/");
     final modulePath = dividedPath.length > 1 ? dividedPath[0] : path;
 
-    final module = modules?.firstWhere(
+    final module = modules.firstWhere(
       (module) => module?.path == modulePath,
       orElse: () => _modulesStack.top(),
     );
@@ -42,14 +43,14 @@ mixin Moduler {
       path = path.substring(0, path.length - 1);
     }
 
-    return module?.routes?.firstWhere(
+    return module?.routes.firstWhere(
       (route) => route!.path == path,
-      orElse: () => module?.routes?.firstWhere(
+      orElse: () => module.routes.firstWhere(
           (route) => route!.path == "/" && module.path == path, orElse: () {
         final dividedRoute = path.split("/")..removeAt(0);
         final routePath = dividedRoute.join("/");
 
-        return module?.routes?.firstWhere(
+        return module.routes.firstWhere(
           (route) => route!.path == routePath,
           orElse: () => null,
         );
@@ -58,7 +59,7 @@ mixin Moduler {
   }
 
   void _manageInjections(Module? module) {
-    if (module != null && _modulesStack.top()?.path == module?.path) {
+    if (module != null && _modulesStack.top()?.path == module.path) {
       return;
     }
 
@@ -82,7 +83,7 @@ mixin Moduler {
       (injector) => !injectedTypes.contains(injector.type),
     );
 
-    this.globalInjections?.forEach((injector) {
+    this.globalInjections.forEach((injector) {
       if (Inject._injections.any((i) => i == injector)) {
         return;
       }
@@ -142,6 +143,13 @@ mixin Moduler {
       name: name,
       arguments: modulePath,
     );
+
+    if (kIsWeb) {
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => view,
+      );
+    }
 
     if (transitionType == null ||
         transitionType == RouteTransitionType.cupertino ||

@@ -11,10 +11,6 @@ final String _modulePath = "main";
 class MainModule extends Module {
   static final routePaths = _Routes();
 
-  MainModule(this._dao);
-
-  final DAO _dao;
-
   @override
   String get path => _modulePath;
 
@@ -30,14 +26,14 @@ class MainModule extends Module {
         ),
         ModuleRoute(
           path: routePaths._home,
-          builder: (_) => HomeView(_dao.user),
+          builder: (_) => HomeView("João"),
         ),
       ];
 
   @override
   List<Injector> get injections => [
-        Injector<AppRegistrationBloc>(inject: (_) => AppRegistrationBloc(_dao)),
-        Injector<LoginBloc>(inject: (_) => LoginBloc(_dao)),
+        Injector<AppRegistrationBloc>(inject: (_) => AppRegistrationBloc()),
+        Injector<LoginBloc>(inject: (_) => LoginBloc()),
       ];
 }
 

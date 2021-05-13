@@ -8,15 +8,11 @@ import 'modules/second_module.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final dao = await DAO.instance();
-  runApp(MyApp(dao));
+  //final dao = await DAO.instance();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget with Moduler {
-  MyApp(this._dao);
-
-  final DAO _dao;
-
   String _user;
 
   @override
@@ -24,18 +20,10 @@ class MyApp extends StatelessWidget with Moduler {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        iconTheme: IconThemeData(color: Colors.amber),
         primarySwatch: Colors.blue,
       ),
       initialRoute: initialRoute(() {
-        if (!_dao.isAppRegistered) {
-          return MainModule.routePaths.appRegistration;
-        }
-
-        if (!_dao.isUserLogged) {
-          return MainModule.routePaths.login;
-        }
-
-        _user = _dao.user;
 
         return MainModule.routePaths.home;
       }),
@@ -47,15 +35,12 @@ class MyApp extends StatelessWidget with Moduler {
 
   @override
   List<Module> get modules => [
-        MainModule(_dao),
+        MainModule(),
         FirstModule(_user),
         SecondModule(),
       ];
 
   @override
   List<Injector> get globalInjections => [
-    Injector<DAO>(inject: (_) {
-      return _dao;
-    }),
   ];
 }

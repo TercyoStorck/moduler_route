@@ -1,6 +1,6 @@
 name: moduler_route
 description: A project to separete your aplication in modules and manager yout routes.
-version: 1.2.0+1
+version: 1.2.1+1
 homepage: https://github.com/TercyoStorck/moduler_route
 
 environment:
