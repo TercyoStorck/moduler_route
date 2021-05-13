@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 
 class Injector<T> {
   Injector({
-    @required this.inject,
+    required this.inject,
   });
 
   Type get type => T;
 
-  final T Function(Object args) inject;
+  final T Function(Object? args) inject;
 
   @override
   bool operator ==(other) {

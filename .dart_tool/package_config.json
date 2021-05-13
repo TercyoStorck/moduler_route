@@ -137,10 +137,10 @@
       "name": "moduler_route",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.1"
+      "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-05-10T18:11:20.827043Z",
+  "generated": "2021-05-13T14:51:52.604044Z",
   "generator": "pub",
   "generatorVersion": "2.12.3"
 }

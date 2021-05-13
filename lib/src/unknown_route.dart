@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class UnknownRoute extends StatelessWidget {
-  final String routeName;
+  final String? routeName;
 
-  const UnknownRoute({Key key, this.routeName}) : super(key: key);
+  const UnknownRoute({Key? key, this.routeName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(

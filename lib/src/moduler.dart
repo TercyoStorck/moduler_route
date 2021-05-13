@@ -18,14 +18,14 @@ part 'inject.dart';
 mixin Moduler {
   static final _modulesStack = StackModule();
 
-  List<Module> get modules;
+  List<Module?> get modules;
   List<Injector> get globalInjections;
 
   final ModulerRouteObserver modulerRouteObserver = ModulerRouteObserver(
     _modulesStack,
   );
 
-  Module _module(String path) {
+  Module? _module(String path) {
     final dividedPath = path.split("/");
     final modulePath = dividedPath.length > 1 ? dividedPath[0] : path;
 
@@ -37,27 +37,27 @@ mixin Moduler {
     return module;
   }
 
-  ModuleRoute _route(String path, Module module) {
+  ModuleRoute? _route(String path, Module? module) {
     if (path.endsWith("/")) {
       path = path.substring(0, path.length - 1);
     }
 
     return module?.routes?.firstWhere(
-      (route) => route.path == path,
+      (route) => route!.path == path,
       orElse: () => module?.routes?.firstWhere(
-          (route) => route.path == "/" && module.path == path, orElse: () {
+          (route) => route!.path == "/" && module.path == path, orElse: () {
         final dividedRoute = path.split("/")..removeAt(0);
         final routePath = dividedRoute.join("/");
 
         return module?.routes?.firstWhere(
-          (route) => route.path == routePath,
+          (route) => route!.path == routePath,
           orElse: () => null,
         );
       }),
     );
   }
 
-  void _manageInjections(Module module) {
+  void _manageInjections(Module? module) {
     if (module != null && _modulesStack.top()?.path == module?.path) {
       return;
     }
@@ -90,14 +90,14 @@ mixin Moduler {
       Inject._injections.add(injector);
     });
 
-    Inject._injections.addAll(_modulesStack.top().injections);
+    Inject._injections.addAll(_modulesStack.top()!.injections);
   }
 
   String initialRoute(String Function() initialPath) => initialPath();
 
   Route routeTo(RouteSettings routeSettings) {
-    final module = _module(routeSettings.name);
-    final route = _route(routeSettings.name, module);
+    final module = _module(routeSettings.name!);
+    final route = _route(routeSettings.name!, module);
 
     if (route == null) {
       return _pageRoute(
@@ -117,7 +117,7 @@ mixin Moduler {
       view,
       route.transitionType,
       routeSettings.name,
-      module.path,
+      module!.path,
     );
 
     return pageRoute;
@@ -134,9 +134,9 @@ mixin Moduler {
 
   PageRoute _pageRoute(
     Widget view,
-    RouteTransitionType transitionType,
-    String name,
-    String modulePath,
+    RouteTransitionType? transitionType,
+    String? name,
+    String? modulePath,
   ) {
     final settings = RouteSettings(
       name: name,
@@ -163,7 +163,7 @@ mixin Moduler {
     return PageTransition(
       settings: settings,
       child: view,
-      type: transitionTypeConversion[transitionType],
+      type: transitionTypeConversion[transitionType]!,
     );
   }
 }

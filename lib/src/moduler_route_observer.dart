@@ -8,15 +8,15 @@ class ModulerRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   final StackModule _modulesStack;
 
   void _manageModules(Route<dynamic> route) {
-    final modulePath = route.settings.arguments as String;
+    final modulePath = route.settings.arguments as String?;
 
-    while(_modulesStack.top().path != modulePath) {
+    while(_modulesStack.top()!.path != modulePath) {
       _modulesStack.pop();
     }
   }
 
   @override
-  void didReplace({Route<dynamic> newRoute, Route<dynamic> oldRoute}) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     
     if (newRoute is PageRoute) {
@@ -25,7 +25,7 @@ class ModulerRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   }
 
   @override
-  void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
     
     if (previousRoute is PageRoute) {
