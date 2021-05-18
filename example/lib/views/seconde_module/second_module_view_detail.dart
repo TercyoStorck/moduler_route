@@ -11,8 +11,8 @@ class SecondModuleViewDetail extends StatelessWidget {
         appBar: AppBar(
           title: Text("Second Module View Detail"),
         ),
-        body: FutureBuilder(
-          future: _bloc.repositoryInstanceTime(),
+        body: FutureBuilder<String>(
+          future: _bloc!.repositoryInstanceTime(),
           builder: (ctx, snapshot) {
             if (!snapshot.hasData) {
               return CircularProgressIndicator();
@@ -20,7 +20,7 @@ class SecondModuleViewDetail extends StatelessWidget {
 
             return Column(
               children: <Widget>[
-                Text(snapshot.data),
+                Text(snapshot.data!),
                 RaisedButton(
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(

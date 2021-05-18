@@ -19,7 +19,7 @@ class DAO {
   bool get isAppRegistered => _box.containsKey(_appRegisterKey);
   bool get isUserLogged => _box.containsKey(_userKey);
 
-  String get user => _box.get(_userKey);
+  String? get user => _box.get(_userKey);
 
   void registerApp(String id) => _box.put(_appRegisterKey, id);
   void login(String userName) => _box.put(_userKey, userName);

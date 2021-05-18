@@ -22,7 +22,7 @@ class MainModule extends Module {
         ),
         ModuleRoute(
           path: routePaths._login,
-          builder: (args) => LoginView(args as String),
+          builder: (args) => LoginView(args as String?),
         ),
         ModuleRoute(
           path: routePaths._home,

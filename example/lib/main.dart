@@ -13,7 +13,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget with Moduler {
-  String _user;
+  String? _user;
 
   @override
   Widget build(BuildContext context) {

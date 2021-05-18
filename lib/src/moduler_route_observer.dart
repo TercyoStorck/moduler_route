@@ -10,7 +10,7 @@ class ModulerRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   void _manageModules(Route<dynamic> route) {
     final modulePath = route.settings.arguments as String?;
 
-    while(_modulesStack.top()!.path != modulePath) {
+    while(_modulesStack.top()?.path != modulePath) {
       _modulesStack.pop();
     }
   }

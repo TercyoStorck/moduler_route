@@ -5,7 +5,7 @@ import 'package:moduler_route/moduler_route.dart';
 
 main() {
   RepositoryMock _repository;
-  SecondModuleDetailBloc _bloc;
+  late SecondModuleDetailBloc _bloc;
 
   setUpAll(() {
     _repository = RepositoryMock();

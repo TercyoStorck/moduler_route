@@ -6,7 +6,7 @@ import 'package:moduler_route/moduler_route.dart';
 class LoginView extends StatelessWidget {
   LoginView(this._registrationId);
 
-  final String _registrationId;
+  final String? _registrationId;
 
   final _bloc = Inject.instance<LoginBloc>();
 
@@ -33,12 +33,12 @@ class LoginView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     TextField(
-                      controller: _bloc.loginController,
+                      controller: _bloc!.loginController,
                       decoration: InputDecoration(labelText: "User name"),
                     ),
                     RaisedButton(
                       onPressed: () {
-                        _bloc.login();
+                        _bloc!.login();
 
                         Navigator.of(context)
                             .pushReplacementNamed(MainModule.routePaths.home);

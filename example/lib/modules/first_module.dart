@@ -9,7 +9,7 @@ class FirstModule extends Module {
 
   FirstModule(this._user);
 
-  final String _user;
+  final String? _user;
 
   @override
   String get path => _modulePath;

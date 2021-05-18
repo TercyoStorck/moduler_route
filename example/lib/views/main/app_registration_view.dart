@@ -14,7 +14,7 @@ class AppRegistrationView extends StatelessWidget {
         body: Center(
           child: RaisedButton(
             onPressed: () {
-              final registrationId = _bloc.registerApp();
+              final registrationId = _bloc!.registerApp();
               
               Navigator.of(context).pushReplacementNamed(
                 MainModule.routePaths.login,
