@@ -144,9 +144,10 @@ mixin Moduler {
     );
 
     if (kIsWeb) {
-      return MaterialPageRoute(
+      return PageRouteBuilder(
         settings: settings,
-        builder: (BuildContext context) => view,
+        pageBuilder: (BuildContext context, a1, a2) => view,
+        transitionDuration: Duration(seconds: 0),
       );
     }
 
