@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moduler_route/moduler_route.dart';
 
-import 'dao/dao.dart';
 import 'modules/first_module.dart';
 import 'modules/main_module.dart';
 import 'modules/second_module.dart';
@@ -9,11 +8,21 @@ import 'modules/second_module.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //final dao = await DAO.instance();
-  runApp(MyApp());
+  runApp(
+    MyApp(
+    ),
+  );
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget with Moduler {
+  static bool isAuthorized = false;
+  //final isAuthorized;
   String? _user;
+
+  /* MyApp({
+    this.isAuthorized = false,
+  }); */
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,6 @@ class MyApp extends StatelessWidget with Moduler {
         primarySwatch: Colors.blue,
       ),
       initialRoute: initialRoute(() {
-
         return MainModule.routePaths.home;
       }),
       onGenerateRoute: routeTo,
@@ -41,6 +49,9 @@ class MyApp extends StatelessWidget with Moduler {
       ];
 
   @override
-  List<Injector> get globalInjections => [
-  ];
+  bool get enableAuthorize => true;
+  @override
+  bool get authorized => MyApp.isAuthorized;
+  @override
+  String get unauthorizedRedirectRoute => MainModule.routePaths.appRegistration;
 }

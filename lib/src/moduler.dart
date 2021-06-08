@@ -21,7 +21,11 @@ mixin Moduler {
   static final _modulesStack = StackModule();
 
   List<Module> get modules;
-  List<Injector> get globalInjections;
+  List<Injector> get globalInjections => [];
+  bool get enableAuthorize => false;
+  bool get authorized => false;
+  String get unauthorizedRedirectRoute => "";
+  //bool get routeGuardEnabled => false;
 
   final ModulerRouteObserver modulerRouteObserver = ModulerRouteObserver(
     _modulesStack,
@@ -32,8 +36,9 @@ mixin Moduler {
     final modulePath = dividedPath.length > 1 ? dividedPath[0] : path;
 
     final module = modules.firstWhereOrNull(
-      (module) => module.path == modulePath,
-    ) ?? _modulesStack.top();
+          (module) => module.path == modulePath,
+        ) ??
+        _modulesStack.top();
 
     return module;
   }
@@ -96,16 +101,39 @@ mixin Moduler {
   String initialRoute(String Function() initialPath) => initialPath();
 
   Route routeTo(RouteSettings routeSettings) {
-    final module = _module(routeSettings.name!);
-    final route = _route(routeSettings.name!, module);
+    Module? module = _module(routeSettings.name!);
+    ModuleRoute? route = _route(routeSettings.name!, module);
 
-    if (route == null) {
+    if (module == null || route == null) {
       return _pageRoute(
         UnknownRoute(routeName: routeSettings.name),
         null,
         "unknown",
         null,
       );
+    }
+
+    if (this.enableAuthorize && !this.authorized) {
+      if (!module.allowAnonymous) {
+        if (!route.allowAnonymous) {
+          module = _module(this.unauthorizedRedirectRoute);
+          route = _route(this.unauthorizedRedirectRoute, module);
+
+          if (module == null || route == null) {
+            return _pageRoute(
+              UnknownRoute(routeName: this.unauthorizedRedirectRoute),
+              null,
+              "unknown",
+              null,
+            );
+          }
+
+          routeSettings = RouteSettings(
+            name: this.unauthorizedRedirectRoute,
+            arguments: module.path,
+          );
+        }
+      }
     }
 
     _manageInjections(module);
@@ -117,7 +145,7 @@ mixin Moduler {
       view,
       route.transitionType,
       routeSettings.name,
-      module!.path,
+      module.path,
     );
 
     return pageRoute;

@@ -14,6 +14,9 @@ class MainModule extends Module {
   @override
   String get path => _modulePath;
 
+  /* @override
+  bool get allowAnonymous => true; */
+
   @override
   List<ModuleRoute> get routes => [
         ModuleRoute(
@@ -23,10 +26,12 @@ class MainModule extends Module {
         ModuleRoute(
           path: routePaths._login,
           builder: (args) => LoginView(args as String?),
+          allowAnonymous: true,
         ),
         ModuleRoute(
           path: routePaths._home,
-          builder: (_) => HomeView("João"),
+          builder: (name) => HomeView(name as String),
+          //allowAnonymous: false,
         ),
       ];
 

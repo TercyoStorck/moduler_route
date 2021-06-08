@@ -1,6 +1,8 @@
 import 'package:example/dao/dao.dart';
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+
 class LoginBloc {
   final _loginController = TextEditingController();
 
@@ -8,6 +10,7 @@ class LoginBloc {
 
   String login() {
     final user = _loginController.text;
-    return "user";
+    MyApp.isAuthorized = true;
+    return user;
   }
 }
