@@ -8,7 +8,7 @@ abstract class Inject {
   static final Map<Type, dynamic> _mocks = {};
 
   /// Return a new instance of an object. If it already instantiated than override for a new one.
-  static T? instance<T>() {
+  static T? instance<T>([Object? parameter]) {
     if (_mocks.containsKey(T)) {
       return _mocks.remove(T) as T?;
     }
@@ -19,7 +19,7 @@ abstract class Inject {
         )
         .inject;
 
-    final instance = injector(_parameter) as T;
+    final instance = injector(parameter ?? _parameter) as T;
 
     _parameter = null;
 

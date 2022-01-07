@@ -3,7 +3,6 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:moduler_route/src/module_route.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:collection/collection.dart';
